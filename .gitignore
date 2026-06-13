@@ -107,3 +107,4 @@ ollama_models/
 
 .DS_Store
 Thumbs.db
+memory.json

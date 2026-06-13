@@ -3,7 +3,7 @@ import requests
 
 class OllamaLLM(LLM):
 
-    def __init__(self, model = "llama3.2:3b"):
+    def __init__(self, model = "qwen3:8b"):
         super().__init__()
         self.model = model
 
