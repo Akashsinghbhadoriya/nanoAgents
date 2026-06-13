@@ -1,4 +1,4 @@
-def build_react_prompt(query, actions, observations, tools, memory):
+def build_react_prompt(query, actions, observations, tools, memory, facts):
 
     history = ""
 
@@ -32,6 +32,10 @@ Never repeat an action if the observation already contains the required informat
 User Query:
 
 {query}
+
+Known fact Memory Keys:
+{facts}
+Use the memory tool to retrieve fact values when needed.
 
 History:
 

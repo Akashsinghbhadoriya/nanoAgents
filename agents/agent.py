@@ -9,10 +9,11 @@ import json
 
 class Agent:
 
-    def __init__(self, registry, llm, memory):
+    def __init__(self, registry, llm, memory, factmemory):
         self.registry = registry
         self.llm = llm
         self.memory = memory
+        self.facts = factmemory.get_all_facts()
 
     def run(self, query):
         Max_steps = 5
@@ -28,7 +29,8 @@ class Agent:
                 state.actions, 
                 state.observations, 
                 tool_descriptions,
-                past_memory
+                past_memory,
+                self.facts
             )
             
             response = self.llm.generate(prompt)

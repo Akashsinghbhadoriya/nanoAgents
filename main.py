@@ -5,16 +5,18 @@ from agents.tool_registry import ToolRegistry
 from agents.agent import Agent
 from llm.ollama_llm import OllamaLLM
 from memory.persistent_memory import PersistentMemory
+from memory.fact_memory import FactMemory
 from tools.memory import MemoryTool
 
+factmemory = FactMemory()
 registry = ToolRegistry()
 registry.register(CalculatorTool())
 registry.register(FileReaderTool())
 registry.register(SearchTool())
-registry.register(MemoryTool())
+registry.register(MemoryTool(factmemory))
 llm = OllamaLLM()
 memory = PersistentMemory()
-agent = Agent(registry, llm, memory)
+agent = Agent(registry, llm, memory, factmemory)
 
 # print(agent.run("add all the numbers in sample.txt file"))
 
@@ -22,4 +24,4 @@ agent = Agent(registry, llm, memory)
 
 # print(agent.run("my favourite city is pune"))
 
-# print(agent.run("What is my favourite city"))
+print(agent.run("What is my favourite city"))
