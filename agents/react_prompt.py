@@ -1,4 +1,4 @@
-def build_react_prompt(query, actions, observations, tools, memory, facts):
+def build_react_prompt(query, actions, observations, tools, memory, facts, context):
 
     history = ""
 
@@ -36,6 +36,10 @@ User Query:
 Known fact Memory Keys:
 {facts}
 Use the memory tool to retrieve fact values when needed.
+
+Context:
+
+{context}
 
 History:
 

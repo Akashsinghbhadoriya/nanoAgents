@@ -7,6 +7,9 @@ from llm.ollama_llm import OllamaLLM
 from memory.persistent_memory import PersistentMemory
 from memory.fact_memory import FactMemory
 from tools.memory import MemoryTool
+from agent_system.agent_system import AgentSystem
+from planning.planner import Planner
+from planning.executor import PlanExecutor
 
 factmemory = FactMemory()
 registry = ToolRegistry()
@@ -17,6 +20,13 @@ registry.register(MemoryTool(factmemory))
 llm = OllamaLLM()
 memory = PersistentMemory()
 agent = Agent(registry, llm, memory, factmemory)
+planner = Planner(llm)
+executor = PlanExecutor(agent)
+system = AgentSystem(planner, executor)
+
+context = system.run("add all the numbers in test.txt file")
+print(context)
+print("final result:", context.final_result)
 
 # print(agent.run("add all the numbers in sample.txt file"))
 
@@ -24,4 +34,4 @@ agent = Agent(registry, llm, memory, factmemory)
 
 # print(agent.run("my favourite city is pune"))
 
-print(agent.run("What is my favourite city"))
+# print(agent.run("What is my favourite city"))

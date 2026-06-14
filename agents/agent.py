@@ -15,7 +15,7 @@ class Agent:
         self.memory = memory
         self.facts = factmemory.get_all_facts()
 
-    def run(self, query):
+    def run(self, query, context):
         Max_steps = 5
 
         state = AgentState(user_query=query)
@@ -30,7 +30,8 @@ class Agent:
                 state.observations, 
                 tool_descriptions,
                 past_memory,
-                self.facts
+                self.facts,
+                context
             )
             
             response = self.llm.generate(prompt)
