@@ -23,6 +23,7 @@ def test_react_loop():
 
     memory = ConversationMemory()
     factmemory = FactMemory()
+    context = ""
 
     agent = Agent(
         llm=llm,
@@ -32,7 +33,8 @@ def test_react_loop():
     )
 
     result = agent.run(
-        "Add 10 20 and 30"
+        "Add 10 20 and 30",
+        context
     )
 
     assert result == "60"

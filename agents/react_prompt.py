@@ -25,7 +25,8 @@ You must follow this process:
 3. Use the observation to decide the next action.
 4. When enough information exists, return type="finish".
 5. Utilize the conversational memory as well for answering the user queries
-6. Recent or the last user query is at the last in the memory and not at the start
+6. Recent or the last user query is at the last in the memory and not at the start.
+7. If the task is a fact which we store in factmemory we need to pass the return type="finish" and with a suitable message. 
 
 Never repeat an action if the observation already contains the required information.
 

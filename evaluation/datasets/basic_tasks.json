@@ -1,0 +1,10 @@
+[
+  {
+    "query": "What is 5*5?",
+    "expected": "25"
+  },
+  {
+    "query": "What is 12+18?",
+    "expected": "30"
+  }
+]

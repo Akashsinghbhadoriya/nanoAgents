@@ -1,37 +1,19 @@
-from tools.calculator import CalculatorTool
-from tools.filereader import FileReaderTool
-from tools.search import SearchTool
-from agents.tool_registry import ToolRegistry
-from agents.agent import Agent
-from llm.ollama_llm import OllamaLLM
-from memory.persistent_memory import PersistentMemory
-from memory.fact_memory import FactMemory
-from tools.memory import MemoryTool
-from agent_system.agent_system import AgentSystem
-from planning.planner import Planner
-from planning.executor import PlanExecutor
+from app import create_app
 
-factmemory = FactMemory()
-registry = ToolRegistry()
-registry.register(CalculatorTool())
-registry.register(FileReaderTool())
-registry.register(SearchTool())
-registry.register(MemoryTool(factmemory))
-llm = OllamaLLM()
-memory = PersistentMemory()
-agent = Agent(registry, llm, memory, factmemory)
-planner = Planner(llm)
-executor = PlanExecutor(agent)
-system = AgentSystem(planner, executor)
+system = create_app()
 
-context = system.run("add all the numbers in test.txt file")
-print(context)
-print("final result:", context.final_result)
+while True:
 
-# print(agent.run("add all the numbers in sample.txt file"))
+    try:
+        query = input("\nquery>>> ")
 
-# print(agent.run("What was the answer of the last user query"))
+    except KeyboardInterrupt:
+        break
 
-# print(agent.run("my favourite city is pune"))
+    if not query or query.lower in ("!quit", "!exit"):
+        break
 
-# print(agent.run("What is my favourite city"))
+    context = system.run(query)
+
+    print(f"\nresponse >>> {context.final_result}")
+

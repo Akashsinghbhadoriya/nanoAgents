@@ -64,6 +64,6 @@ class Agent:
                 action=str(action),
                 observation=str(observation)
             )
-            print(json.dumps(steptrace.__dict__, indent=4, default=str))
+            # print(json.dumps(steptrace.__dict__, indent=4, default=str))
 
         
