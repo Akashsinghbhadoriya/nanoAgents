@@ -59,12 +59,18 @@ If you do not have sufficient information to answer the user query return proper
     "success": False,
     "answer": "Your final detailed message here."
 }}
-If a required tool fails and the task cannot continue and their is repeated failure return this:
+
+If an observation failed:
+- Try another tool if possible.
+- Ask for clarification if needed.
+- If the task cannot continue, return:
 {{
-    "type": "finish",
-    "success": False,
-    "answer": "Your final detailed message here."
+  "type": "finish",
+  "success": False,
+  "answer": "reason"
 }}
+Never fabricate information.
+
 If you have sufficient information to answer the user query:
 {{
     "type": "finish",

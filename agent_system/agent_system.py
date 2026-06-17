@@ -31,7 +31,7 @@ class AgentSystem:
         if response.get("route") == "direct":
             result = json.loads(self.llm.generate(goal))
             return AgentContext(
-                final_result=result["response"]
+                final_result=result
             )
         
         self.progress.planning_started()

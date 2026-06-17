@@ -23,6 +23,7 @@ class Agent:
         tool_descriptions = self.registry.tool_descriptions()
         past_memory = self.memory.get_context()
         last_response = None
+        consecutive_failure = 0
 
         for step in range(Max_steps):
             facts = self.factmemory.get_all_facts()
@@ -45,7 +46,7 @@ class Agent:
                 return AgentResult(
                     answer=parsed.get("answer"),
                     traces=step_trace,
-                    success=parse_response.get("success")
+                    success=parsed.get("success")
                 )
             
             action = Action(
@@ -72,6 +73,11 @@ class Agent:
                 observation=str(observation)
             )
             step_trace.append(steptrace)
+            if not parsed.get("success"):
+                consecutive_failure += 1
+            
+            if consecutive_failure > 2:
+                break
             # print(json.dumps(steptrace.__dict__, indent=4, default=str))
 
         return AgentResult(

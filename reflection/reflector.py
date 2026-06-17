@@ -17,5 +17,7 @@ class Reflector:
 
         return ReflectionResult(
             passed=data["passed"],
-            reason=data["reason"]
+            reason=data["reason"],
+            action=data["action"],
+            retry_instruction=data.get("retry_instruction")
         )

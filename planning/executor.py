@@ -23,7 +23,7 @@ class PlanExecutor:
             while retry < self.max_retries:
 
                 if reflection is not None:
-                    context_formatted = self.format_context(context, reflection.reason)
+                    context_formatted = self.format_context(context, reflection.retry_instruction)
                 else:
                     context_formatted = self.format_context(context)
 
@@ -45,6 +45,8 @@ class PlanExecutor:
                 )
                 reflections.append(reflection)
                 if reflection.passed:
+                    break
+                if not reflection.passed and reflection.action == "stop":
                     break
             
             if reflection.passed:
