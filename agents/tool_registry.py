@@ -24,6 +24,10 @@ class ToolRegistry:
         return "\n".join(descriptions)
     
     def execute(self, tool_call):
+
+        if not tool_call.tool or not tool_call.args:
+            return "no tool found or no tool args found"
+        
         tool = self.tools[tool_call.tool]
 
         return tool.run(**tool_call.args)

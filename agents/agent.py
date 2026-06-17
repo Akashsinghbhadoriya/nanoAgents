@@ -6,6 +6,7 @@ from agents.action import Action
 from agents.observation import Observation
 from agents.tool_call import ToolCall
 import json
+from agents.agent_result import AgentResult
 
 class Agent:
 
@@ -13,37 +14,40 @@ class Agent:
         self.registry = registry
         self.llm = llm
         self.memory = memory
-        self.facts = factmemory.get_all_facts()
+        self.factmemory = factmemory
 
     def run(self, query, context):
         Max_steps = 5
-
+        step_trace = []
         state = AgentState(user_query=query)
         tool_descriptions = self.registry.tool_descriptions()
         past_memory = self.memory.get_context()
-        self.memory.add("user", query)
 
         for step in range(Max_steps):
+            facts = self.factmemory.get_all_facts()
             prompt = build_react_prompt(
                 state.user_query, 
                 state.actions, 
                 state.observations, 
                 tool_descriptions,
                 past_memory,
-                self.facts,
+                facts,
                 context
             )
             
             response = self.llm.generate(prompt)
 
             parsed = parse_response(response)
-            if parsed["type"] == "finish":
-                self.memory.add("assistant", parsed["answer"])
-                return parsed["answer"]
+
+            if parsed.get("type") == "finish":
+                return AgentResult(
+                    answer=parsed.get("answer"),
+                    traces=step_trace
+                )
             
             action = Action(
-                tool=parsed["tool"],
-                args=parsed["args"]
+                tool=parsed.get("tool"),
+                args=parsed.get("args")
             )
             state.actions.append(action)
             
@@ -64,6 +68,11 @@ class Agent:
                 action=str(action),
                 observation=str(observation)
             )
+            step_trace.append(steptrace)
             # print(json.dumps(steptrace.__dict__, indent=4, default=str))
 
+        return AgentResult(
+                    answer="Reached Max Steps",
+                    traces=step_trace
+        )
         

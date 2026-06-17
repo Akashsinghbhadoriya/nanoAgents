@@ -8,12 +8,15 @@ class PlanExecutor:
         self.max_retries = MAX_RETRIES
         self.reflector = reflector
 
-    def execute(self, plan):
+    def execute(self, plan, progress):
 
         context = ExecutionContext()
+        current = 1
+        step_trace = []
 
         for task in plan.tasks:
             
+            progress.task_started(task, current, len(plan.tasks))
             retry = 0
             reflection = None
             while retry < self.max_retries:
@@ -23,7 +26,9 @@ class PlanExecutor:
                 else:
                     context_formatted = self.format_context(context)
 
-                result = self.react_agent.run(task.description, context_formatted)
+                response = self.react_agent.run(task.description, context_formatted)
+                result = response.answer
+                step_trace.append(response.traces)
                 retry += 1
 
                 context.add_result(
@@ -40,8 +45,9 @@ class PlanExecutor:
                     break
 
             task.completed = True
+            current += 1
 
-        return context
+        return context, step_trace
     
     def format_context(self, context, retry_reason=None):
 
