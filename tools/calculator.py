@@ -1,4 +1,5 @@
 from tools.base import Tool
+from tools.tool_result import ToolResult
 
 class CalculatorTool(Tool):
     name = "calculator"
@@ -9,4 +10,7 @@ class CalculatorTool(Tool):
     """
 
     def run(self, expression):
-        return str(eval(expression))
+        return ToolResult(
+            success=True,
+            content=str(eval(expression))
+        )

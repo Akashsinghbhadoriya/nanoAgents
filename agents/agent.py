@@ -22,6 +22,7 @@ class Agent:
         state = AgentState(user_query=query)
         tool_descriptions = self.registry.tool_descriptions()
         past_memory = self.memory.get_context()
+        last_response = None
 
         for step in range(Max_steps):
             facts = self.factmemory.get_all_facts()
@@ -38,11 +39,13 @@ class Agent:
             response = self.llm.generate(prompt)
 
             parsed = parse_response(response)
+            last_response = parsed
 
             if parsed.get("type") == "finish":
                 return AgentResult(
                     answer=parsed.get("answer"),
-                    traces=step_trace
+                    traces=step_trace,
+                    success=parse_response.get("success")
                 )
             
             action = Action(
@@ -72,7 +75,8 @@ class Agent:
             # print(json.dumps(steptrace.__dict__, indent=4, default=str))
 
         return AgentResult(
-                    answer="Reached Max Steps",
-                    traces=step_trace
+                    answer=last_response.get("answer"),
+                    traces=step_trace,
+                    success=last_response.get("success")
         )
         

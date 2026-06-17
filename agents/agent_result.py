@@ -5,3 +5,4 @@ class AgentResult:
 
     answer: str
     traces: list
+    success: bool

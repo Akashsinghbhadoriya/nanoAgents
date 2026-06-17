@@ -19,6 +19,7 @@ class PlanExecutor:
             progress.task_started(task, current, len(plan.tasks))
             retry = 0
             reflection = None
+            reflections = []
             while retry < self.max_retries:
 
                 if reflection is not None:
@@ -28,7 +29,8 @@ class PlanExecutor:
 
                 response = self.react_agent.run(task.description, context_formatted)
                 result = response.answer
-                step_trace.append(response.traces)
+                if response.traces:
+                    step_trace.extend(response.traces)
                 retry += 1
 
                 context.add_result(
@@ -41,13 +43,18 @@ class PlanExecutor:
                     trace=self.format_context(context),
                     result=result
                 )
+                reflections.append(reflection)
                 if reflection.passed:
                     break
-
-            task.completed = True
+            
+            if reflection.passed:
+                task.completed = True
+            else:
+                task.completed = False
+                break
             current += 1
 
-        return context, step_trace
+        return context, step_trace, reflections
     
     def format_context(self, context, retry_reason=None):
 

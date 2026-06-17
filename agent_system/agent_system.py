@@ -1,6 +1,15 @@
 from agent_system.agent_context import AgentContext
 import json
 
+def to_dict(obj):
+    if isinstance(obj, list):
+        return [to_dict(item) for item in obj]
+    if isinstance(obj, dict):
+        return {k: to_dict(v) for k, v in obj.items()}
+    if hasattr(obj, "__dict__"):
+        return {k: to_dict(v) for k, v in obj.__dict__.items()}
+    return obj
+
 class AgentSystem:
 
     def __init__(self, planner, executor, memory, logger, progress, router, llm):
@@ -28,15 +37,16 @@ class AgentSystem:
         self.progress.planning_started()
         plan = self.planner.create_plan(goal)
 
-        context, step_traces = self.executor.execute(plan, self.progress)
+        context, step_traces, reflections = self.executor.execute(plan, self.progress)
         self.memory.add("assistant", context.final_result)
 
         data = {
             "query":goal,
-            "plan":plan,
+            "plan":to_dict(plan),
             "response":context.final_result,
-            "context":context,
-            "step_traces": step_traces
+            "context":to_dict(context),
+            "step_traces": to_dict(step_traces),
+            "reflection": to_dict(reflections)
         }
         
         filepath = self.logger.save(data)

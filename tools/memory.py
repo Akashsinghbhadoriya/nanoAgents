@@ -1,4 +1,6 @@
 from tools.base import Tool
+from tools.tool_result import ToolResult
+
 class MemoryTool(Tool):
 
     name = "memory"
@@ -42,8 +44,15 @@ class MemoryTool(Tool):
     def run(self, operation, key, value=None):
 
         if operation == "get":
-            return self.factmemory.get_fact(key)
+            return ToolResult(
+                success=True,
+                content=self.factmemory.get_fact(key)
+            )
 
         if operation == "set":
             self.factmemory.set_fact(key, value)
-        return f"Stored {key}"
+
+        return ToolResult(
+            success=True,
+            content=f"Stored {key}"
+        )

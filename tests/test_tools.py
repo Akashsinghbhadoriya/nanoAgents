@@ -8,7 +8,7 @@ def test_calculator():
 
     result = tool.run("2+2")
 
-    assert result == "4"
+    assert result.content == "4"
 
 
 def test_calculator():
@@ -16,7 +16,7 @@ def test_calculator():
 
     result = tool.run("sample.txt")
 
-    assert result == "Hello Agent"
+    assert result.content == "Hello Agent"
 
 def test_memory():
     factmemory = FactMemory()
@@ -26,4 +26,4 @@ def test_memory():
 
     result = tool.run("get", "favourite_city")
 
-    assert result == "Pune"
+    assert result.content == "Pune"

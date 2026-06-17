@@ -25,4 +25,4 @@ def test_calculator_execution():
         tool_call
     )
 
-    assert result == '25'
+    assert result.content == '25'

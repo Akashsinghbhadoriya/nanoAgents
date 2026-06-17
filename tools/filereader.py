@@ -1,4 +1,6 @@
 from tools.base import Tool
+from pathlib import Path
+from tools.tool_result import ToolResult
 
 class FileReaderTool(Tool):
     name = "file_reader"
@@ -8,5 +10,15 @@ class FileReaderTool(Tool):
         filepath (str)
     """
     def run(self, filepath):
-        with open(filepath, "r") as f:
-            return f.read()
+        path = Path(filepath)
+        if path.exists():
+            with open(filepath, "r") as f:
+                return ToolResult(
+                    content=f.read(),
+                    success=True
+                    )
+        
+        return ToolResult(
+            success=False,
+            content=f"FilePath does not exist {filepath}"
+        )

@@ -37,4 +37,4 @@ def test_react_loop():
         context
     )
 
-    assert result == "60"
+    assert result.answer == "60"
