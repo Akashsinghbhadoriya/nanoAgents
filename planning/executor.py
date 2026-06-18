@@ -13,13 +13,12 @@ class PlanExecutor:
         context = ExecutionContext()
         current = 1
         step_trace = []
-
+        reflections = []
         for task in plan.tasks:
             
             progress.task_started(task, current, len(plan.tasks))
             retry = 0
             reflection = None
-            reflections = []
             while retry < self.max_retries:
 
                 if reflection is not None:
@@ -46,7 +45,7 @@ class PlanExecutor:
                 reflections.append(reflection)
                 if reflection.passed:
                     break
-                if not reflection.passed and reflection.action == "stop":
+                if not reflection.passed and (reflection.action == "stop" or reflection.action == "replan"):
                     break
             
             if reflection.passed:

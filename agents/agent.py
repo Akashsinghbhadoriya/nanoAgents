@@ -81,8 +81,8 @@ class Agent:
             # print(json.dumps(steptrace.__dict__, indent=4, default=str))
 
         return AgentResult(
-                    answer=last_response.get("answer"),
-                    traces=step_trace,
-                    success=last_response.get("success")
+            answer=last_response.get("answer"),
+            traces=step_trace,
+            success=last_response.get("success")
         )
         

@@ -1,5 +1,6 @@
 from tools.calculator import CalculatorTool
 from tools.filereader import FileReaderTool
+from tools.filesearch import FileSearchTool
 from tools.search import SearchTool
 from agents.tool_registry import ToolRegistry
 from agents.agent import Agent
@@ -21,6 +22,7 @@ def create_app():
     progress = ProgressReporter()
     registry = ToolRegistry()
     registry.register(CalculatorTool())
+    registry.register(FileSearchTool())
     registry.register(FileReaderTool())
     registry.register(SearchTool())
     registry.register(MemoryTool(factmemory))
