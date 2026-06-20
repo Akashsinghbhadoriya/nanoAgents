@@ -1,75 +1,109 @@
 def build_routing_prompt(query):
 
     return f"""
-You are a routing system.
+    You are a routing system for an AI System Design Copilot.
 
-Classify the user query into one of the following routes.
+    Classify the user request into exactly one route.
 
-1. direct
-- General knowledge questions
-- Explanations and definitions
-- Simple reasoning with no tools
-- NEVER use this for anything involving user-specific facts, preferences, or personal information
+    1. direct
 
-Examples:
-"What is FlashAttention?"
-"Explain transformers."
-"Why is the sky blue?"
+    Use when the user is asking for:
 
-2. tool
-- A single tool can fully solve the task
-- No planning or multi-step decomposition required
-- Use this when the user shares a personal fact, preference, or asks you to remember something → use the memory tool (operation: set)
-- Use this when the user asks about their own stored facts, preferences, or goals → use the memory tool (operation: get)
-- Use this for single calculations, single searches, single file reads
+    - System design concepts
+    - Architecture explanations
+    - Technology comparisons
+    - Definitions
+    - Best practices
+    - Tradeoff discussions
+    - Interview-style questions
 
-Examples:
-"What is 25 * 25?"                          → calculator tool
-"Search for OpenAI"                          → search tool
-"My favorite city is Pune."                  → memory tool (set favorite_city = Pune)
-"My name is Alex."                           → memory tool (set name = Alex)
-"Remember that I prefer dark mode."          → memory tool (set preference_theme = dark)
-"I love hiking."                             → memory tool (set hobby = hiking)
-"What is my favorite city?"                  → memory tool (get favorite_city)
-"What do you know about me?"                 → memory tool (get all facts)
-"What is my name?"                           → memory tool (get name)
+    Examples:
 
-3. plan
-- Multiple steps or multiple tools are required
-- Task decomposition is needed
-- Involves reading files AND processing their contents
-- Involves researching AND then synthesizing
+    "What is a load balancer?"
 
-Examples:
-"Read test.txt and add all numbers."
-"Analyze this repository."
-"Research Nvidia and summarize findings."
+    "Explain Redis."
 
----
+    "Difference between Kafka and RabbitMQ."
 
-IMPORTANT RULES:
-- Any time the user states a personal fact, preference, favorite, goal, or asks you to remember something → ALWAYS route to "tool" (memory tool set).
-- Any time the user asks about their own stored information → ALWAYS route to "tool" (memory tool get).
-- Never route personal facts or user-related queries to "direct" or "plan".
+    "What is eventual consistency?"
 
-Query:
-{query}
+    "When should I use microservices?"
 
-Return only JSON:
+    "Explain database sharding."
 
-{{
-    "route": "direct"
-}}
+    2. tool
 
-or
+    Use when a single architecture tool can solve the request.
 
-{{
-    "route": "tool"
-}}
+    Examples:
 
-or
+    "Generate a Mermaid diagram for a chat application."
 
-{{
-    "route": "plan"
-}}
-"""
+    "Generate APIs for a food delivery app."
+
+    "Generate a database schema for Uber."
+
+    "Estimate scaling requirements for Netflix."
+
+    "Generate architecture for YouTube."
+
+    A single tool call is sufficient.
+
+    3. plan
+
+    Use when the request requires a complete system design workflow.
+
+    Examples:
+
+    "Design Uber."
+
+    "Design Netflix."
+
+    "Design WhatsApp."
+
+    "Design YouTube."
+
+    "Design an e-commerce platform."
+
+    "Design a ride-sharing system."
+
+    These requests require multiple stages such as:
+
+    - Architecture generation
+    - Database design
+    - API design
+    - Capacity planning
+    - Diagram generation
+
+    Use "plan" whenever multiple architecture tools are needed.
+
+    RULES:
+
+    - Use direct for explanations and conceptual questions.
+    - Use tool when exactly one architecture artifact is requested.
+    - Use plan when a complete system design must be produced.
+    - If unsure between tool and plan:
+    - One artifact -> tool
+    - Full design -> plan
+
+    Query:
+    {query}
+
+    Return JSON only:
+
+    {{
+        "route": "direct"
+    }}
+
+    or
+
+    {{
+        "route": "tool"
+    }}
+
+    or
+
+    {{
+        "route": "plan"
+    }}
+    """

@@ -15,6 +15,11 @@ from reflection.reflector import Reflector
 from logger.run_logger import RunLogger
 from logger.progress_report import ProgressReporter
 from routing.router import Router
+from tools.architecturetool import SystemDesignTool
+from tools.diagram import Diagram
+from tools.scaletool import ScaleTool
+from tools.apitool import APITool
+from tools.databasetool import DatabaseTool
 
 def create_app():
     factmemory = FactMemory()
@@ -27,6 +32,11 @@ def create_app():
     registry.register(SearchTool())
     registry.register(MemoryTool(factmemory))
     llm = OllamaLLM()
+    registry.register(SystemDesignTool(llm))
+    registry.register(Diagram(llm))
+    registry.register(APITool(llm))
+    registry.register(DatabaseTool(llm))
+    registry.register(ScaleTool(llm))
     reflector = Reflector(llm)
     router = Router(llm)
     memory = PersistentMemory()

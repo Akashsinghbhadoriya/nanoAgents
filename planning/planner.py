@@ -1,7 +1,7 @@
 import json
 from planning.plan import Plan
 from planning.task import Task
-from planning.prompts import PLANNER_PROMPT, replaner_prompt
+from planning.prompts import PLANNER_PROMPT, replanner_prompt
 
 class Planner:
 
@@ -38,7 +38,7 @@ class Planner:
         )
     
     def create_replan(self, goal, step_traces, failure_reason, context):
-        prompt = replaner_prompt(
+        prompt = replanner_prompt(
             goal,
             step_traces, 
             failure_reason, 
